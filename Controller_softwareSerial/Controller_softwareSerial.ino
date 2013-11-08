@@ -8,6 +8,8 @@
 // 3. Since we are specifying the number of channels, if we are not sending anything to a particlar channel
 //    we change it to idle.
 //
+// How to use this.
+// We send in signal using SoftwareSerial's serial monitor
 
 
 #include <DMXSerial.h>
@@ -16,6 +18,11 @@
 #define txPin 4
 #define testPin 5
 #define arrSize 10
+
+  // initialize used variables
+  int channel;
+  int index;
+  int data[arrSize] = { 0 }; //declare each channel
 
 //Initialize software serial port
 SoftwareSerial computerSerial = SoftwareSerial(rxPin, txPin);
@@ -35,28 +42,27 @@ void setup(){
 }
 
 void loop(){
-  // initialize used variables
-  int channel;
-  int index;
-  int data[arrSize] = { 0 }; //declare each channel
-
+  // Send data only when I receive data
   if(computerSerial.available() > 0){
     
     // Get channel
     channel = index = computerSerial.read();
     
     // Get data from PC
-    for(index; index >= 0; index--){
-      
-      data[arrSize-index] = computerSerial.read(); // putting data to each channel
-      
+    while(index > 0){
+      // The idea is that we only decrease the counter only when receive data
+      // or else the program will keep on looping at get data phase
+      if(computerSerial.available() > 0){
+        data[arrSize-index] = computerSerial.read(); // putting data to each channel
+        index--;
+      }
     }
   }
   // Send it to DMX slaves
-    while(index >= 0){
-    DMXSerial.write((arrSize-index), data[arrSize-index]); // Push data to DMX slaves
-    analogWrite(testPin, data[arrSize-index]); // Make sure we are sending out data
-    index--;
+    while(index > 0){
+      DMXSerial.write((arrSize-index), data[arrSize-index]); // Push data to DMX slaves
+      analogWrite(testPin, data[arrSize-index]); // Make sure we are sending out data
+      index--;
     }
   
 }
