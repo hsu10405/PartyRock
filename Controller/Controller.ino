@@ -11,8 +11,8 @@ const int max_channel = 10; //defining max channel here
 void setup() {
   DMXSerial.init(DMXController);
   pinMode(output, OUTPUT);
- // Serial.begin(9600); //initialize serial monitor
- // Serial.println("Monitor initialized");
+  Serial.begin(250000); //initialize serial monitor
+  Serial.println("Monitor initialized");
   
 }
 
@@ -22,7 +22,7 @@ void loop() {
   
   // Only send data when you get data  
   // Getting inputs
- /*
+ 
   if(Serial.available() > 0){
     Serial.println("Select a channel.");
     channel = Serial.read();
@@ -43,7 +43,7 @@ void loop() {
       signal_stat = OFF;
     }
   }
-  */
+  
   // Passing input to receiver, for now it only takes one input per cycle.
   DMXSerial.write(channel, signal_stat);
   delayMicroseconds(2000); // Wait a little bit.  
