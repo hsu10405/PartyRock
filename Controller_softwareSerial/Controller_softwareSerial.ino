@@ -14,18 +14,18 @@
 
 #include <DMXSerial.h>
 #include <SoftwareSerial.h>
-#define rxPin 3
-#define txPin 4
+#define rxPin 8
+#define txPin 9
 #define testPin 5
 #define arrSize 10
 
   // initialize used variables
-  int channel;
-  int index;
+  int channel = 0;
+  int index = 0;
   int data[arrSize] = { 0 }; //declare each channel
 
 //Initialize software serial port
-SoftwareSerial computerSerial = SoftwareSerial(rxPin, txPin);
+SoftwareSerial dmxSerial = SoftwareSerial(rxPin, txPin);
 
 void setup(){
   // initialize the DMX controller
@@ -35,25 +35,25 @@ void setup(){
   pinMode(txPin, OUTPUT);
   pinMode(testPin, OUTPUT);
   
-  // Setting the transmission frequency
-  computerSerial.begin(250000);
+  // Setting the transmission rate of SoftwareSerial
+  dmxSerial.begin(9600);
 
   
 }
 
 void loop(){
   // Send data only when I receive data
-  if(computerSerial.available() > 0){
+  if(dmxSerial.available() > 0){
     
     // Get channel
-    channel = index = computerSerial.read();
+    channel = index = dmxSerial.read();
     
     // Get data from PC
     while(index > 0){
       // The idea is that we only decrease the counter only when receive data
       // or else the program will keep on looping at get data phase
-      if(computerSerial.available() > 0){
-        data[arrSize-index] = computerSerial.read(); // putting data to each channel
+      if(dmxSerial.available() > 0){
+        data[arrSize-index] = dmxSerial.read(); // putting data to each channel
         index--;
       }
     }
