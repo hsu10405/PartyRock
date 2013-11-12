@@ -37,26 +37,33 @@ void setup(){
   
   // Setting the transmission rate of SoftwareSerial
   dmxSerial.begin(9600);
+  dmxSerial.setTimeout(100000);
+  dmxSerial.flush();
 
   
 }
 
 void loop(){
   // Send data only when I receive data
+  digitalWrite(testPin, HIGH);
   if(dmxSerial.available() > 0){
     
     // Get channel
-    channel = index = dmxSerial.read();
+    channel = index = dmxSerial.parseInt();
+    
+    // Show that I got input from PC_to Controller Arduino
+    digitalWrite(testPin, LOW); // Turn it off
     
     // Get data from PC
     while(index > 0){
       // The idea is that we only decrease the counter only when receive data
       // or else the program will keep on looping at get data phase
       if(dmxSerial.available() > 0){
-        data[arrSize-index] = dmxSerial.read(); // putting data to each channel
+        data[arrSize-index] = dmxSerial.parseInt(); // putting data to each channel
         index--;
       }
     }
+    index = channel; // Reset index
   }
   // Send it to DMX slaves
     while(index > 0){
