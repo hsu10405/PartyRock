@@ -1,0 +1,1 @@
+This is the serial transmitter funcition using the AltSoftSerial library. The new library is supposed to be more efficient and have less latency than Arduino's builtin SoftwareSerial library. This code changes the brightness of a LED from no light (0) to full brightness (255).

@@ -1,0 +1,1 @@
+This is the receiver function using AltSoftSerial library. This library is supposed to be more efficient than Arduino's built-in Software Serial library. If the library works correctly, the function would caused a LED to go from dark (0) to full brightness (255).

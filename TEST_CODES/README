@@ -1,0 +1,2 @@
+This folder contains test code to test out individual functionality of the program (e.g. some might only contain prototypes of Software Serial code). 
+These codes are solely for testing purposes and will be merged into the main program if the codes are proven to be more efficient.
