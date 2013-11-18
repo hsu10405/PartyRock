@@ -20,6 +20,7 @@ void loop(){
     Serial.println(counter);
     altSerial.write(counter);
     analogWrite(testPin, counter);
+    counter++;
   }
 }
   
