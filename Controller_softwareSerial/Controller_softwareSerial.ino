@@ -11,21 +11,26 @@
 // How to use this.
 // We send in signal using SoftwareSerial's serial monitor
 
+// Update: the AltSoftSerial turns out to be a better software serial library.
 
 #include <DMXSerial.h>
-#include <SoftwareSerial.h>
-#define rxPin 8
-#define txPin 9
+//#include <SoftwareSerial.h>
+#include <AltSoftSerial.h>
+
+//#define rxPin 8
+//#define txPin 9
 #define testPin 5
 #define arrSize 10
+
+AltSoftSerial altSerial;
 
   // initialize used variables
   int channel = 0;
   int index = 0;
   int data[arrSize] = { 0 }; //declare each channel
 
-//Initialize software serial port
-SoftwareSerial dmxSerial = SoftwareSerial(rxPin, txPin);
+// Initialize software serial port
+// SoftwareSerial dmxSerial = SoftwareSerial(rxPin, txPin);
 
 void setup(){
   // initialize the DMX controller
@@ -36,30 +41,31 @@ void setup(){
   pinMode(testPin, OUTPUT);
   
   // Setting the transmission rate of SoftwareSerial
-  dmxSerial.begin(9600);
-  dmxSerial.setTimeout(100000);
-  dmxSerial.flush();
+  altSerial.begin(9600);
+  // dmxSerial.setTimeout(100000);
+  // dmxSerial.flush();
 
   
 }
 
 void loop(){
   // Send data only when I receive data
-  digitalWrite(testPin, HIGH);
-  if(dmxSerial.available() > 0){
+  //digitalWrite(testPin, HIGH);
+  if(altSerial.available() > 0){
     
     // Get channel
-    channel = index = dmxSerial.parseInt();
+    channel = index = altSerial.parseInt();
     
     // Show that I got input from PC_to Controller Arduino
-    digitalWrite(testPin, LOW); // Turn it off
+    //digitalWrite(testPin, LOW); // Turn it off
     
     // Get data from PC
     while(index > 0){
       // The idea is that we only decrease the counter only when receive data
       // or else the program will keep on looping at get data phase
-      if(dmxSerial.available() > 0){
-        data[arrSize-index] = dmxSerial.parseInt(); // putting data to each channel
+      if(altSerial.available() > 0){
+        data[arrSize-index] = altSerial.parseInt(); // putting data to each channel
+        analogWrite(data[arrSize-index], testPin);
         index--;
       }
     }
