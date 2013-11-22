@@ -10,10 +10,18 @@ void setup(){
   Serial.begin(9600);
   Serial.println("AltSoftSerial Test Begin");
   altSerial.begin(9600);
+  Serial.setTimeout(100000);
 }
 
 void loop(){
   // The program affects a LED brightness. It starts at no light and gradually move to full brightness
+  int data;
+  
+  if(Serial.available() > 0){
+   data = Serial.parseInt(); 
+  }
+  
+  /*
   counter = 0;
   while(counter < 256){
     Serial.print("Sent data is: "); // Show what's being transmitted
@@ -22,6 +30,7 @@ void loop(){
     analogWrite(testPin, counter);
     counter++;
   }
+  */
 }
   
 
