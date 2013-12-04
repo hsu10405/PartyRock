@@ -34,7 +34,7 @@ void setup(){
 
 void loop(){
   int channel = 0;
-  int index = 1;
+  int index = 0;
   int data[arrSize]; //declare each channel
   // Get data from altSerial
   softSerial(data, &channel);

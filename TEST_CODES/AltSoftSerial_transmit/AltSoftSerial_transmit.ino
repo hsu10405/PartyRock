@@ -15,10 +15,18 @@ void setup(){
 
 void loop(){
   // The program affects a LED brightness. It starts at no light and gradually move to full brightness
-  int data;
-  
+  int data = 0;
+  //Serial.println(data);
   if(Serial.available() > 0){
-   data = Serial.parseInt(); 
+    data = Serial.parseInt();
+    //Serial.println(data); 
+     
+    Serial.println(data);
+    analogWrite(testPin, data);
+    altSerial.write(data);
+    delay(1000);
+    
+    
   }
   
   /*
