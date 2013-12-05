@@ -15,10 +15,10 @@
 #include <AltSoftSerial.h>
 
 #define testPin 5
-#define arrSize 10
+const int HI = 255;
 
 AltSoftSerial altSerial;
-void softSerial(); 
+void softSerialArray(); 
 
 void setup(){
   // initialize the DMX controller
@@ -26,28 +26,29 @@ void setup(){
   
   pinMode(testPin, OUTPUT);
   
-  // Setting the transmission rate of SoftwareSerial
   altSerial.begin(9600);
-  
-  
+  altSerial.setTimeout(100000);  
 }
 
 void loop(){
+  // The first data the controller sees will be the channel value
+  // The second data the controller sees will be the value for that channel.
+  // Set default values
   int channel = 0;
-  int index = 0;
-  int data[arrSize]; //declare each channel
-  // Get data from altSerial
-  softSerial(data, &channel);
-  // Send it to DMX slaves
-  while(index < channel){
-    DMXSerial.write(index + 1, data[index]); // Push data to DMX slaves
-    analogWrite(testPin, data[index]); // Make sure we are sending out data
-    index++;
+  int data = HI;
+  // Get channel and data
+  if(altSerial.available() > 0){
+    channel = altSerial.parseInt();
+    data = altSerial.parseInt();
   }
+  // Since the channel and data are screened by the PC_to_Controller module, we don't have
+  // to check them again here.
+  DMXSerial.write(channel, data);  
   
 }
-void softSerial(int *array, int *channel){
+void softSerialArray(int *array, int *channel){
   // Get channel, the trasmitter must know the channel limit.
+  // NOTE: THIS FUNCTION IS OUTDATED, MIGHT BE REMOVED.
   int index = 0;
   if(altSerial.available() > 0){
     *channel = altSerial.read();
